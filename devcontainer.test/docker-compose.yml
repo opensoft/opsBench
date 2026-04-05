@@ -1,0 +1,12 @@
+version: '3.8'
+
+services:
+  test:
+    image: ops-bench:${USER:-brett}
+    container_name: ops-bench-test
+    command: sleep infinity
+    volumes:
+      - ./test.sh:/test/test.sh:ro
+    working_dir: /workspace
+    environment:
+      - USER=${USER:-brett}

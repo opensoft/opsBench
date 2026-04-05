@@ -1,0 +1,35 @@
+# Layer 2: Ops Bench Image
+# Extends Layer 1b (adminbench-base) with deployment, CI/CD, and security tools
+# Philosophy: "Deliver & Secure" - tools that ship code and guard deployments
+# USER-AGNOSTIC: No user creation — Layer 3 handles user setup
+
+FROM adminbench-base:latest
+
+# Container version labels
+LABEL layer="2"
+LABEL layer.name="ops-bench"
+LABEL layer.version="1.0.0"
+LABEL layer.description="Ops bench with deployment, CI/CD, and security tools (user-agnostic)"
+LABEL bench.type="ops-admin"
+
+# Everything runs as root
+USER root
+
+# ========================================
+# OPS-SPECIFIC TOOLS
+# ========================================
+
+# Install prerequisites for ops tools
+RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
+    && apt-get -y install --no-install-recommends \
+    unzip \
+    python3-pip \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install ops tools (minimal core set)
+COPY install-ops-tools-minimal.sh /tmp/
+RUN bash /tmp/install-ops-tools-minimal.sh && rm /tmp/install-ops-tools-minimal.sh
+
+# Default command
+CMD ["sleep", "infinity"]
