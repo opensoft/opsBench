@@ -30,6 +30,37 @@ CI/CD, and shift-left security tooling.
 - Checkov: IaC security scanning (full install only)
 - age + SOPS: Git-native secret encryption
 
+### Supply Chain Security
+- Syft: SBOM generation (pairs with Grype)
+- Cosign: Container image signing/verification
+
+### Policy as Code
+- Conftest: Policy testing for K8s manifests, Dockerfiles, Terraform plans
+
+### Load & Performance Testing
+- k6: Scriptable load testing
+
+### Container Image Tooling
+- crane: Inspect/copy/mutate images without Docker daemon
+
+### K8s Configuration for Developers
+- Kustomize: Standalone manifest overlay management
+- Helmfile: Declarative multi-release Helm management
+
+### K8s Developer Experience
+- kubectx + kubens: Fast cluster/namespace context switching
+- pluto: Detect deprecated K8s API versions
+- kubeseal: Sealed Secrets encryption for GitOps
+
+### Local K8s Clusters
+- k3d: Disposable local K8s clusters for Tilt/Skaffold
+
+### Task Runner
+- task (Go Task): Modern task runner for repo workflows
+
+### Release Management
+- semantic-release: Automated versioning and changelogs from conventional commits
+
 ## Build
 ```bash
 ./build-layer2.sh --user $(whoami)

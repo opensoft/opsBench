@@ -49,6 +49,47 @@ check "age-keygen" "age-keygen --version"
 check "SOPS" "sops --version"
 
 echo
+echo "Supply Chain Security:"
+check "Syft" "syft version"
+check "Cosign" "cosign version"
+
+echo
+echo "Policy as Code:"
+check "Conftest" "conftest --version"
+
+echo
+echo "Load & Performance Testing:"
+check "k6" "k6 version"
+
+echo
+echo "Container Image Tooling:"
+check "crane" "crane version"
+
+echo
+echo "K8s Configuration:"
+check "Kustomize" "kustomize version"
+check "Helmfile" "helmfile version"
+
+echo
+echo "K8s Developer Experience:"
+check "kubectx" "which kubectx"
+check "kubens" "which kubens"
+check "pluto" "pluto version"
+check "kubeseal" "kubeseal --version"
+
+echo
+echo "Local K8s Clusters:"
+check "k3d" "k3d version"
+
+echo
+echo "Task Runner:"
+check "task" "task --version"
+
+echo
+echo "Release Management:"
+check "semantic-release" "which semantic-release"
+
+echo
 echo "Layer 1b Tools (from adminbench-base):"
 check "Terraform" "terraform version"
 check "kubectl" "kubectl version --client"

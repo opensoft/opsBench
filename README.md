@@ -40,6 +40,37 @@ code .  # Open in VSCode and reopen in container
 - **age / age-keygen**: File encryption
 - **SOPS**: Encrypt secrets directly in Git repositories
 
+**Supply Chain Security**
+- **Syft**: SBOM generation (pairs with Grype for scan-then-audit)
+- **Cosign**: Container image signing and verification
+
+**Policy as Code**
+- **Conftest**: Policy testing for K8s manifests, Dockerfiles, Terraform plans
+
+**Load & Performance Testing**
+- **k6**: Modern, scriptable load testing
+
+**Container Image Tooling**
+- **crane**: Inspect, copy, mutate container images without Docker daemon
+
+**K8s Configuration for Developers**
+- **Kustomize**: Standalone K8s manifest overlay management
+- **Helmfile**: Declarative multi-release Helm management
+
+**K8s Developer Experience**
+- **kubectx / kubens**: Fast cluster and namespace context switching
+- **pluto**: Detect deprecated K8s API versions in Helm releases
+- **kubeseal**: Encrypt secrets for Bitnami Sealed Secrets / GitOps
+
+**Local K8s Clusters**
+- **k3d**: Spin up disposable local K8s clusters (for Tilt/Skaffold inner-loop)
+
+**Task Runner**
+- **task (Go Task)**: Modern, clean task runner for repo workflows
+
+**Release Management**
+- **semantic-release**: Automated versioning and changelog from conventional commits
+
 ### Inherited from Layer 1b (Read-Only)
 - Terraform, OpenTofu, kubectl, k9s, stern
 - AWS CLI, Azure CLI, gcloud
