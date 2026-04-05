@@ -105,11 +105,10 @@ check "gh" "gh --version"
 check "jq" "jq --version"
 
 echo
-echo "User & Environment:"
-check "User is brett" "[ \"$(whoami)\" = 'brett' ]"
-check "Home directory exists" "[ -d '/home/brett' ]"
+echo "Environment:"
 check "Zsh shell" "[ -f '/bin/zsh' ]"
 check "Workspace directory" "[ -d '/workspace' ]"
+check "/etc/skel configs" "[ -f '/etc/skel/.zshrc' ]"
 
 echo
 echo "=========================================="

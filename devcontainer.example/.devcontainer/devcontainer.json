@@ -1,11 +1,15 @@
 {
   "name": "Ops Bench Workspace",
-  "dockerComposeFile": "../docker-compose.yml",
-  "service": "workspace",
-  "workspaceFolder": "/workspace",
-  "remoteUser": "${localEnv:USER}",
+  "initializeCommand": "bash ${localWorkspaceFolder}/../../scripts/ensure-layer3.sh --base ops-bench:latest",
+  "image": "ops-bench:${localEnv:USER}",
+  "runArgs": [
+    "--privileged"
+  ],
   "customizations": {
     "vscode": {
+      "settings": {
+        "terminal.integrated.defaultProfile.linux": "zsh"
+      },
       "extensions": [
         "ms-azuretools.vscode-docker",
         "ms-kubernetes-tools.vscode-kubernetes-tools",
@@ -20,5 +24,38 @@
       ]
     }
   },
-  "features": {}
+  "containerEnv": {
+    "SHELL": "/bin/zsh",
+    "DOCKER_HOST": "unix:///var/run/docker.sock"
+  },
+  "remoteUser": "${localEnv:USER}",
+  "workspaceFolder": "/workspace",
+  "mounts": [
+    "source=opsbench-zshhistory,target=/home/${localEnv:USER}/.zsh_history,type=volume",
+    "source=${localEnv:HOME}/projects,target=/workspace/projects,type=bind",
+    "source=${localEnv:HOME}/.zshrc,target=/home/${localEnv:USER}/.zshrc,type=bind,readonly",
+    "source=${localEnv:HOME}/.oh-my-zsh,target=/home/${localEnv:USER}/.oh-my-zsh,type=bind,readonly",
+    "source=${localEnv:HOME}/.p10k.zsh,target=/home/${localEnv:USER}/.p10k.zsh,type=bind,readonly",
+    "source=${localEnv:HOME}/.bashrc,target=/home/${localEnv:USER}/.bashrc,type=bind,readonly",
+    "source=${localEnv:HOME}/.gitconfig,target=/home/${localEnv:USER}/.gitconfig,type=bind,readonly",
+    "source=${localEnv:HOME}/.ssh,target=/home/${localEnv:USER}/.ssh,type=bind,readonly",
+    "source=${localEnv:HOME}/.config/gh,target=/home/${localEnv:USER}/.config/gh,type=bind,readonly",
+    "source=/var/run/docker.sock,target=/var/run/docker.sock,type=bind",
+    "source=${localEnv:HOME}/.claude,target=/home/${localEnv:USER}/.claude,type=bind,consistency=cached",
+    "source=${localEnv:HOME}/.claude.json,target=/home/${localEnv:USER}/.claude.json,type=bind,consistency=cached",
+    "source=${localEnv:HOME}/.codex,target=/home/${localEnv:USER}/.codex,type=bind,consistency=cached",
+    "source=${localEnv:HOME}/.gemini,target=/home/${localEnv:USER}/.gemini,type=bind,consistency=cached",
+    "source=${localEnv:HOME}/.copilot-cli,target=/home/${localEnv:USER}/.copilot-cli,type=bind,readonly"
+  ],
+  "forwardPorts": [8080, 8443, 9090],
+  "portsAttributes": {
+    "8080": {
+      "label": "code-server",
+      "onAutoForward": "notify"
+    },
+    "9090": {
+      "label": "Dev Server",
+      "onAutoForward": "notify"
+    }
+  }
 }

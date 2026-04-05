@@ -1,12 +1,16 @@
 services:
   workspace:
-    image: ops-bench:brett
+    image: ops-bench:${USER}
     command: sleep infinity
     volumes:
-      # Mount full host home directory
-      - ~:/home/brett:cached
-      - .:/workspace
+      - ../:/workspace:cached
+      - ~/projects:/projects:cached
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ~/.gitconfig:/home/${USER}/.gitconfig:ro
+      - ~/.ssh:/home/${USER}/.ssh:ro
     working_dir: /workspace
     environment:
-      - USER=brett
+      - DOCKER_HOST=unix:///var/run/docker.sock
+    privileged: true
+    user: "${UID:-1000}:${GID:-1000}"
     network_mode: host
