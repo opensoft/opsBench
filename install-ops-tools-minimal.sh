@@ -53,7 +53,11 @@ chmod +x /usr/local/bin/skaffold
 skaffold version
 
 echo "Installing Tilt..."
-curl -fsSL https://raw.githubusercontent.com/tilt-dev/tilt/master/scripts/install.sh | bash
+TILT_VERSION="0.33.22"
+curl -L "https://github.com/tilt-dev/tilt/releases/download/v${TILT_VERSION}/tilt.${TILT_VERSION}.linux.x86_64.tar.gz" -o /tmp/tilt.tar.gz
+tar -xzf /tmp/tilt.tar.gz -C /usr/local/bin tilt
+rm /tmp/tilt.tar.gz
+chmod +x /usr/local/bin/tilt
 tilt version
 
 # ========================================
@@ -206,7 +210,7 @@ k3d version
 # ========================================
 
 echo "Installing task (Go Task runner)..."
-curl -L "https://github.com/go-task/task/releases/download/v3.43.0/task_linux_amd64.tar.gz" -o /tmp/task.tar.gz
+curl -L "https://github.com/go-task/task/releases/download/v3.49.1/task_linux_amd64.tar.gz" -o /tmp/task.tar.gz
 tar -xzf /tmp/task.tar.gz -C /usr/local/bin task
 rm /tmp/task.tar.gz
 chmod +x /usr/local/bin/task
