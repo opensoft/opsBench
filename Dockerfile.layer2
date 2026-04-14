@@ -1,9 +1,10 @@
 # Layer 2: Ops Bench Image
-# Extends Layer 1b (adminbench-base) with deployment, CI/CD, and security tools
+# Extends Layer 1b (sys-bench-base) with deployment, CI/CD, and security tools
 # Philosophy: "Deliver & Secure" - tools that ship code and guard deployments
 # USER-AGNOSTIC: No user creation — Layer 3 handles user setup
 
-FROM adminbench-base:latest
+ARG BASE_IMAGE=sys-bench-base:latest
+FROM ${BASE_IMAGE}
 
 # Container version labels
 LABEL layer="2"
@@ -24,7 +25,6 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
     && apt-get -y install --no-install-recommends \
     unzip \
     python3-pip \
-    npm \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 

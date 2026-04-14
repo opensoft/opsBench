@@ -6,8 +6,10 @@ Operations bench with deployment orchestration, CI/CD pipelines, and shift-left 
 
 ### Build the Image
 ```bash
-./build-layer2.sh --user brett
+./build-layer.sh
 ```
+
+If you only need to rebuild the shared Layer 2 image, run `./build-layer2.sh`.
 
 ### Create a Workspace
 ```bash
@@ -74,12 +76,13 @@ code .  # Open in VSCode and reopen in container
 ### Inherited from Layer 1b (Read-Only)
 - Terraform, OpenTofu, kubectl, k9s, stern
 - AWS CLI, Azure CLI, gcloud
-- Ansible, Helm, promtool, lazydocker
+- Ansible, Helm, promtool, docker, lazydocker
 
 ### Inherited from Layer 0 (System)
 - zsh with Oh-My-Zsh, tmux, fzf, bat, zoxide
 - neovim, jq, yq, tldr
 - AI CLIs (Claude Code, Copilot, Codex, Gemini, OpenCode)
+- `yolo` shell alias for Claude Code teammate mode
 
 ## Architecture Philosophy
 
@@ -105,7 +108,7 @@ docker compose down
 
 The `devcontainer.example` includes:
 - VSCode devcontainer configuration
-- Docker compose with host mounts
+- Docker compose with host mounts and `/var/run/docker.sock`
 - Recommended VSCode extensions for ops work
 
 ## Version
@@ -113,4 +116,4 @@ The `devcontainer.example` includes:
 - Layer: 2
 - Type: ops-admin
 - Version: 1.0.0
-- Base: adminbench-base (Layer 1b)
+- Base: sys-bench-base (Layer 1b)

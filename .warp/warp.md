@@ -1,13 +1,14 @@
 # OpsBench - Layer 2 Operations Bench
 
 ## Overview
-OpsBench is a Layer 2 container image extending adminbench-base (Layer 1b) with deployment,
+OpsBench is a Layer 2 container image extending sys-bench-base (Layer 1b) with deployment,
 CI/CD, and shift-left security tooling.
 
 ## Architecture
 - **Layer 0**: workbench-base (system tools, AI CLIs)
-- **Layer 1b**: adminbench-base (Terraform, kubectl, cloud CLIs, Ansible)
-- **Layer 2**: ops-bench (this bench - deployment, CI/CD, security)
+- **Layer 1b**: sys-bench-base (Terraform, kubectl, cloud CLIs, Ansible)
+- **Layer 2**: ops-bench:latest (this bench - deployment, CI/CD, security)
+- **Layer 3**: ops-bench:${USER} (user image used by workspaces)
 
 ## Tool Categories
 
@@ -63,7 +64,8 @@ CI/CD, and shift-left security tooling.
 
 ## Build
 ```bash
-./build-layer2.sh --user $(whoami)
+./build-layer2.sh
+bash ../../scripts/ensure-layer3.sh --base ops-bench:latest --user $(whoami)
 ```
 
 ## Testing

@@ -1,10 +1,9 @@
 {
-  "name": "Ops Bench Workspace",
+  "name": "sysBenches / opsBench",
   "initializeCommand": "bash ${localWorkspaceFolder}/../../scripts/ensure-layer3.sh --base ops-bench:latest",
-  "image": "ops-bench:${localEnv:USER}",
-  "runArgs": [
-    "--privileged"
-  ],
+  "dockerComposeFile": "../docker-compose.yml",
+  "service": "ops-bench",
+  "shutdownAction": "stopCompose",
   "customizations": {
     "vscode": {
       "settings": {
@@ -29,6 +28,7 @@
     "DOCKER_HOST": "unix:///var/run/docker.sock"
   },
   "remoteUser": "${localEnv:USER}",
+  "updateRemoteUserUID": false,
   "workspaceFolder": "/workspace",
   "mounts": [
     "source=opsbench-zshhistory,target=/home/${localEnv:USER}/.zsh_history,type=volume",

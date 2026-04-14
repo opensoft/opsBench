@@ -1,6 +1,6 @@
 #!/bin/bash
 # Layer 2 Ops Bench Tools Installation Script
-# Installs deployment, CI/CD, and security tools on top of adminbench-base (Layer 1b)
+# Installs deployment, CI/CD, and security tools on top of sys-bench-base (Layer 1b)
 
 set -e
 

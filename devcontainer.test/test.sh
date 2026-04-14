@@ -90,7 +90,7 @@ echo "Release Management:"
 check "semantic-release" "which semantic-release"
 
 echo
-echo "Layer 1b Tools (from adminbench-base):"
+echo "Layer 1b Tools (from sys-bench-base):"
 check "Terraform" "terraform version"
 check "kubectl" "kubectl version --client"
 check "Helm" "helm version"
@@ -103,6 +103,11 @@ echo "Layer 0 Tools (from workbench-base):"
 check "git" "git --version"
 check "gh" "gh --version"
 check "jq" "jq --version"
+check "Claude Code" "command -v claude"
+check "Codex" "command -v codex"
+check "Gemini" "command -v gemini"
+check "OpenCode" "command -v opencode"
+check "yolo alias" "zsh -ic 'alias yolo' | grep -q 'claude --dangerously-skip-permissions --teammate-mode tmux'"
 
 echo
 echo "Environment:"

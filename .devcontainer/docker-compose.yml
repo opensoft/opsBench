@@ -1,0 +1,11 @@
+name: sys-benches
+
+services:
+  ops-bench:
+    image: ops-bench:${USER:-brett}
+    container_name: ops-bench
+    command: sleep infinity
+    working_dir: /workspace
+    privileged: true
+    environment:
+      - DOCKER_HOST=unix:///var/run/docker.sock

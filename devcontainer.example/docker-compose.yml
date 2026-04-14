@@ -1,6 +1,9 @@
+name: sys-benches
+
 services:
-  workspace:
+  ops-bench:
     image: ops-bench:${USER}
+    container_name: ops-bench
     command: sleep infinity
     volumes:
       - ../:/workspace:cached
