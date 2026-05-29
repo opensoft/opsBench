@@ -15,6 +15,10 @@ source "$REPO_DIR/scripts/lib/image-names.sh"
 cd "$SCRIPT_DIR"
 
 BASE_IMAGE="$(resolve_existing_image "$(family_base_image sys)" "$(legacy_family_base_image sys 2>/dev/null || true)" || true)"
+DOCKER_BUILD_ARGS=()
+if [ "${DOCKER_BUILD_NO_CACHE:-0}" = "1" ]; then
+    DOCKER_BUILD_ARGS+=(--no-cache)
+fi
 
 # Check if Layer 1b exists
 if [ -z "$BASE_IMAGE" ]; then
@@ -29,6 +33,7 @@ fi
 # Build the image (user-agnostic)
 echo "Building ops-bench:latest..."
 docker build \
+    "${DOCKER_BUILD_ARGS[@]}" \
     --build-arg BASE_IMAGE="$BASE_IMAGE" \
     -f Dockerfile.layer2 \
     -t "ops-bench:latest" \
