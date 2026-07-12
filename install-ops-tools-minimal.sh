@@ -13,7 +13,11 @@ echo "=========================================="
 # ========================================
 
 echo "Installing code-server (VS Code in browser)..."
-curl -fsSL https://code-server.dev/install.sh | sh -s -- --version 4.100.3
+CODE_SERVER_VERSION=$(curl -s https://api.github.com/repos/coder/code-server/releases/latest | grep '"tag_name"' | sed -E 's/.*"v([^"]+)".*/\1/' | head -1)
+if [ -z "$CODE_SERVER_VERSION" ]; then
+    CODE_SERVER_VERSION="4.126.0"
+fi
+curl -fsSL https://code-server.dev/install.sh | sh -s -- --version "$CODE_SERVER_VERSION"
 code-server --version
 
 echo "Installing Azure ML CLI (v2)..."
@@ -21,7 +25,11 @@ pip3 install --break-system-packages azure-ai-ml azure-identity
 echo "Azure ML CLI v2 installed"
 
 echo "Installing act (run GitHub Actions locally)..."
-curl -L "https://github.com/nektos/act/releases/download/v0.2.74/act_Linux_x86_64.tar.gz" -o /tmp/act.tar.gz
+ACT_VERSION=$(curl -s https://api.github.com/repos/nektos/act/releases/latest | grep '"tag_name"' | sed -E 's/.*"v([^"]+)".*/\1/' | head -1)
+if [ -z "$ACT_VERSION" ]; then
+    ACT_VERSION="0.2.89"
+fi
+curl -L "https://github.com/nektos/act/releases/download/v${ACT_VERSION}/act_Linux_x86_64.tar.gz" -o /tmp/act.tar.gz
 tar -xzf /tmp/act.tar.gz -C /usr/local/bin act
 rm /tmp/act.tar.gz
 chmod +x /usr/local/bin/act
@@ -32,7 +40,11 @@ act --version
 # ========================================
 
 echo "Installing ArgoCD CLI..."
-curl -L "https://github.com/argoproj/argo-cd/releases/download/v2.14.11/argocd-linux-amd64" -o /usr/local/bin/argocd
+ARGOCD_VERSION=$(curl -s https://api.github.com/repos/argoproj/argo-cd/releases/latest | grep '"tag_name"' | sed -E 's/.*"v([^"]+)".*/\1/' | head -1)
+if [ -z "$ARGOCD_VERSION" ]; then
+    ARGOCD_VERSION="3.4.4"
+fi
+curl -L "https://github.com/argoproj/argo-cd/releases/download/v${ARGOCD_VERSION}/argocd-linux-amd64" -o /usr/local/bin/argocd
 chmod +x /usr/local/bin/argocd
 argocd version --client
 
@@ -41,7 +53,11 @@ curl -s https://fluxcd.io/install.sh | bash
 flux --version
 
 echo "Installing Tekton CLI (tkn)..."
-curl -L "https://github.com/tektoncd/cli/releases/download/v0.40.0/tkn_0.40.0_Linux_x86_64.tar.gz" -o /tmp/tkn.tar.gz
+TKN_VERSION=$(curl -s https://api.github.com/repos/tektoncd/cli/releases/latest | grep '"tag_name"' | sed -E 's/.*"v([^"]+)".*/\1/' | head -1)
+if [ -z "$TKN_VERSION" ]; then
+    TKN_VERSION="0.45.0"
+fi
+curl -L "https://github.com/tektoncd/cli/releases/download/v${TKN_VERSION}/tkn_${TKN_VERSION}_Linux_x86_64.tar.gz" -o /tmp/tkn.tar.gz
 tar -xzf /tmp/tkn.tar.gz -C /usr/local/bin tkn
 rm /tmp/tkn.tar.gz
 chmod +x /usr/local/bin/tkn
@@ -53,7 +69,10 @@ chmod +x /usr/local/bin/skaffold
 skaffold version
 
 echo "Installing Tilt..."
-TILT_VERSION="0.33.22"
+TILT_VERSION=$(curl -s https://api.github.com/repos/tilt-dev/tilt/releases/latest | grep '"tag_name"' | sed -E 's/.*"v([^"]+)".*/\1/' | head -1)
+if [ -z "$TILT_VERSION" ]; then
+    TILT_VERSION="0.37.4"
+fi
 curl -L "https://github.com/tilt-dev/tilt/releases/download/v${TILT_VERSION}/tilt.${TILT_VERSION}.linux.x86_64.tar.gz" -o /tmp/tilt.tar.gz
 tar -xzf /tmp/tilt.tar.gz -C /usr/local/bin tilt
 rm /tmp/tilt.tar.gz
@@ -65,14 +84,22 @@ tilt version
 # ========================================
 
 echo "Installing Vault CLI..."
-curl -L "https://releases.hashicorp.com/vault/1.19.2/vault_1.19.2_linux_amd64.zip" -o /tmp/vault.zip
+VAULT_VERSION=$(curl -s https://api.github.com/repos/hashicorp/vault/releases/latest | grep '"tag_name"' | sed -E 's/.*"v([^"]+)".*/\1/' | head -1)
+if [ -z "$VAULT_VERSION" ]; then
+    VAULT_VERSION="2.0.3"
+fi
+curl -L "https://releases.hashicorp.com/vault/${VAULT_VERSION}/vault_${VAULT_VERSION}_linux_amd64.zip" -o /tmp/vault.zip
 unzip -o /tmp/vault.zip -d /usr/local/bin
 rm /tmp/vault.zip
 chmod +x /usr/local/bin/vault
 vault --version
 
 echo "Installing Grype (container vulnerability scanner)..."
-curl -L "https://github.com/anchore/grype/releases/download/v0.90.0/grype_0.90.0_linux_amd64.tar.gz" -o /tmp/grype.tar.gz
+GRYPE_VERSION=$(curl -s https://api.github.com/repos/anchore/grype/releases/latest | grep '"tag_name"' | sed -E 's/.*"v([^"]+)".*/\1/' | head -1)
+if [ -z "$GRYPE_VERSION" ]; then
+    GRYPE_VERSION="0.115.0"
+fi
+curl -L "https://github.com/anchore/grype/releases/download/v${GRYPE_VERSION}/grype_${GRYPE_VERSION}_linux_amd64.tar.gz" -o /tmp/grype.tar.gz
 tar -xzf /tmp/grype.tar.gz -C /usr/local/bin grype
 rm /tmp/grype.tar.gz
 chmod +x /usr/local/bin/grype
@@ -87,7 +114,11 @@ snyk --version || echo "Snyk installed (auth required for full version check)"
 # Install manually if needed: pip3 install --break-system-packages checkov
 
 echo "Installing age (file encryption)..."
-curl -L "https://github.com/FiloSottile/age/releases/download/v1.2.1/age-v1.2.1-linux-amd64.tar.gz" -o /tmp/age.tar.gz
+AGE_VERSION=$(curl -s https://api.github.com/repos/FiloSottile/age/releases/latest | grep '"tag_name"' | sed -E 's/.*"v([^"]+)".*/\1/' | head -1)
+if [ -z "$AGE_VERSION" ]; then
+    AGE_VERSION="1.3.1"
+fi
+curl -L "https://github.com/FiloSottile/age/releases/download/v${AGE_VERSION}/age-v${AGE_VERSION}-linux-amd64.tar.gz" -o /tmp/age.tar.gz
 tar -xzf /tmp/age.tar.gz -C /tmp
 mv /tmp/age/age /usr/local/bin/
 mv /tmp/age/age-keygen /usr/local/bin/
@@ -96,7 +127,11 @@ chmod +x /usr/local/bin/age /usr/local/bin/age-keygen
 age --version
 
 echo "Installing SOPS (secrets in Git)..."
-curl -L "https://github.com/getsops/sops/releases/download/v3.9.4/sops-v3.9.4.linux.amd64" -o /usr/local/bin/sops
+SOPS_VERSION=$(curl -s https://api.github.com/repos/getsops/sops/releases/latest | grep '"tag_name"' | sed -E 's/.*"v([^"]+)".*/\1/' | head -1)
+if [ -z "$SOPS_VERSION" ]; then
+    SOPS_VERSION="3.13.2"
+fi
+curl -L "https://github.com/getsops/sops/releases/download/v${SOPS_VERSION}/sops-v${SOPS_VERSION}.linux.amd64" -o /usr/local/bin/sops
 chmod +x /usr/local/bin/sops
 sops --version
 
@@ -105,14 +140,22 @@ sops --version
 # ========================================
 
 echo "Installing Syft (SBOM generation)..."
-curl -L "https://github.com/anchore/syft/releases/download/v1.22.0/syft_1.22.0_linux_amd64.tar.gz" -o /tmp/syft.tar.gz
+SYFT_VERSION=$(curl -s https://api.github.com/repos/anchore/syft/releases/latest | grep '"tag_name"' | sed -E 's/.*"v([^"]+)".*/\1/' | head -1)
+if [ -z "$SYFT_VERSION" ]; then
+    SYFT_VERSION="1.46.0"
+fi
+curl -L "https://github.com/anchore/syft/releases/download/v${SYFT_VERSION}/syft_${SYFT_VERSION}_linux_amd64.tar.gz" -o /tmp/syft.tar.gz
 tar -xzf /tmp/syft.tar.gz -C /usr/local/bin syft
 rm /tmp/syft.tar.gz
 chmod +x /usr/local/bin/syft
 syft version
 
 echo "Installing Cosign (container image signing)..."
-curl -L "https://github.com/sigstore/cosign/releases/download/v2.4.3/cosign-linux-amd64" -o /usr/local/bin/cosign
+COSIGN_VERSION=$(curl -s https://api.github.com/repos/sigstore/cosign/releases/latest | grep '"tag_name"' | sed -E 's/.*"v([^"]+)".*/\1/' | head -1)
+if [ -z "$COSIGN_VERSION" ]; then
+    COSIGN_VERSION="3.1.1"
+fi
+curl -L "https://github.com/sigstore/cosign/releases/download/v${COSIGN_VERSION}/cosign-linux-amd64" -o /usr/local/bin/cosign
 chmod +x /usr/local/bin/cosign
 cosign version
 
@@ -121,7 +164,11 @@ cosign version
 # ========================================
 
 echo "Installing Conftest (policy testing)..."
-curl -L "https://github.com/open-policy-agent/conftest/releases/download/v0.58.0/conftest_0.58.0_Linux_x86_64.tar.gz" -o /tmp/conftest.tar.gz
+CONFTEST_VERSION=$(curl -s https://api.github.com/repos/open-policy-agent/conftest/releases/latest | grep '"tag_name"' | sed -E 's/.*"v([^"]+)".*/\1/' | head -1)
+if [ -z "$CONFTEST_VERSION" ]; then
+    CONFTEST_VERSION="0.68.2"
+fi
+curl -L "https://github.com/open-policy-agent/conftest/releases/download/v${CONFTEST_VERSION}/conftest_${CONFTEST_VERSION}_Linux_x86_64.tar.gz" -o /tmp/conftest.tar.gz
 tar -xzf /tmp/conftest.tar.gz -C /usr/local/bin conftest
 rm /tmp/conftest.tar.gz
 chmod +x /usr/local/bin/conftest
@@ -132,9 +179,13 @@ conftest --version
 # ========================================
 
 echo "Installing k6 (load testing)..."
-curl -L "https://github.com/grafana/k6/releases/download/v0.57.0/k6-v0.57.0-linux-amd64.tar.gz" -o /tmp/k6.tar.gz
+K6_VERSION=$(curl -s https://api.github.com/repos/grafana/k6/releases/latest | grep '"tag_name"' | sed -E 's/.*"v([^"]+)".*/\1/' | head -1)
+if [ -z "$K6_VERSION" ]; then
+    K6_VERSION="2.1.0"
+fi
+curl -L "https://github.com/grafana/k6/releases/download/v${K6_VERSION}/k6-v${K6_VERSION}-linux-amd64.tar.gz" -o /tmp/k6.tar.gz
 tar -xzf /tmp/k6.tar.gz -C /tmp
-mv /tmp/k6-v0.57.0-linux-amd64/k6 /usr/local/bin/
+mv /tmp/k6-v${K6_VERSION}-linux-amd64/k6 /usr/local/bin/
 rm -rf /tmp/k6*
 chmod +x /usr/local/bin/k6
 k6 version
@@ -144,7 +195,11 @@ k6 version
 # ========================================
 
 echo "Installing crane (image manipulation)..."
-curl -L "https://github.com/google/go-containerregistry/releases/download/v0.20.3/go-containerregistry_Linux_x86_64.tar.gz" -o /tmp/crane.tar.gz
+CRANE_VERSION=$(curl -s https://api.github.com/repos/google/go-containerregistry/releases/latest | grep '"tag_name"' | sed -E 's/.*"v([^"]+)".*/\1/' | head -1)
+if [ -z "$CRANE_VERSION" ]; then
+    CRANE_VERSION="0.21.7"
+fi
+curl -L "https://github.com/google/go-containerregistry/releases/download/v${CRANE_VERSION}/go-containerregistry_Linux_x86_64.tar.gz" -o /tmp/crane.tar.gz
 tar -xzf /tmp/crane.tar.gz -C /usr/local/bin crane
 rm /tmp/crane.tar.gz
 chmod +x /usr/local/bin/crane
@@ -155,14 +210,22 @@ crane version
 # ========================================
 
 echo "Installing Kustomize..."
-curl -L "https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize%2Fv5.6.0/kustomize_v5.6.0_linux_amd64.tar.gz" -o /tmp/kustomize.tar.gz
+KUSTOMIZE_VERSION=$(curl -s https://api.github.com/repos/kubernetes-sigs/kustomize/releases | grep '"tag_name": "kustomize/' | head -1 | sed -E 's/.*kustomize\/v([^"]+)".*/\1/')
+if [ -z "$KUSTOMIZE_VERSION" ]; then
+    KUSTOMIZE_VERSION="5.8.1"
+fi
+curl -L "https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize%2Fv${KUSTOMIZE_VERSION}/kustomize_v${KUSTOMIZE_VERSION}_linux_amd64.tar.gz" -o /tmp/kustomize.tar.gz
 tar -xzf /tmp/kustomize.tar.gz -C /usr/local/bin
 rm /tmp/kustomize.tar.gz
 chmod +x /usr/local/bin/kustomize
 kustomize version
 
 echo "Installing Helmfile..."
-curl -L "https://github.com/helmfile/helmfile/releases/download/v0.171.0/helmfile_0.171.0_linux_amd64.tar.gz" -o /tmp/helmfile.tar.gz
+HELMFILE_VERSION=$(curl -s https://api.github.com/repos/helmfile/helmfile/releases/latest | grep '"tag_name"' | sed -E 's/.*"v([^"]+)".*/\1/' | head -1)
+if [ -z "$HELMFILE_VERSION" ]; then
+    HELMFILE_VERSION="1.6.0"
+fi
+curl -L "https://github.com/helmfile/helmfile/releases/download/v${HELMFILE_VERSION}/helmfile_${HELMFILE_VERSION}_linux_amd64.tar.gz" -o /tmp/helmfile.tar.gz
 tar -xzf /tmp/helmfile.tar.gz -C /usr/local/bin helmfile
 rm /tmp/helmfile.tar.gz
 chmod +x /usr/local/bin/helmfile
@@ -173,10 +236,14 @@ helmfile version
 # ========================================
 
 echo "Installing kubectx and kubens..."
-curl -L "https://github.com/ahmetb/kubectx/releases/download/v0.9.5/kubectx_v0.9.5_linux_x86_64.tar.gz" -o /tmp/kubectx.tar.gz
+KUBECTX_VERSION=$(curl -s https://api.github.com/repos/ahmetb/kubectx/releases/latest | grep '"tag_name"' | sed -E 's/.*"v([^"]+)".*/\1/' | head -1)
+if [ -z "$KUBECTX_VERSION" ]; then
+    KUBECTX_VERSION="0.11.0"
+fi
+curl -L "https://github.com/ahmetb/kubectx/releases/download/v${KUBECTX_VERSION}/kubectx_v${KUBECTX_VERSION}_linux_x86_64.tar.gz" -o /tmp/kubectx.tar.gz
 tar -xzf /tmp/kubectx.tar.gz -C /usr/local/bin kubectx
 rm /tmp/kubectx.tar.gz
-curl -L "https://github.com/ahmetb/kubectx/releases/download/v0.9.5/kubens_v0.9.5_linux_x86_64.tar.gz" -o /tmp/kubens.tar.gz
+curl -L "https://github.com/ahmetb/kubectx/releases/download/v${KUBECTX_VERSION}/kubens_v${KUBECTX_VERSION}_linux_x86_64.tar.gz" -o /tmp/kubens.tar.gz
 tar -xzf /tmp/kubens.tar.gz -C /usr/local/bin kubens
 rm /tmp/kubens.tar.gz
 chmod +x /usr/local/bin/kubectx /usr/local/bin/kubens
@@ -184,14 +251,22 @@ kubectx --version || echo "kubectx installed"
 kubens --version || echo "kubens installed"
 
 echo "Installing pluto (K8s API deprecation detector)..."
-curl -L "https://github.com/FairwindsOps/pluto/releases/download/v5.21.0/pluto_5.21.0_linux_amd64.tar.gz" -o /tmp/pluto.tar.gz
+PLUTO_VERSION=$(curl -s https://api.github.com/repos/FairwindsOps/pluto/releases/latest | grep '"tag_name"' | sed -E 's/.*"v([^"]+)".*/\1/' | head -1)
+if [ -z "$PLUTO_VERSION" ]; then
+    PLUTO_VERSION="5.24.0"
+fi
+curl -L "https://github.com/FairwindsOps/pluto/releases/download/v${PLUTO_VERSION}/pluto_${PLUTO_VERSION}_linux_amd64.tar.gz" -o /tmp/pluto.tar.gz
 tar -xzf /tmp/pluto.tar.gz -C /usr/local/bin pluto
 rm /tmp/pluto.tar.gz
 chmod +x /usr/local/bin/pluto
 pluto version
 
 echo "Installing kubeseal (Sealed Secrets CLI)..."
-curl -L "https://github.com/bitnami-labs/sealed-secrets/releases/download/v0.28.0/kubeseal-0.28.0-linux-amd64.tar.gz" -o /tmp/kubeseal.tar.gz
+KUBESEAL_VERSION=$(curl -s https://api.github.com/repos/bitnami-labs/sealed-secrets/releases/latest | grep '"tag_name"' | sed -E 's/.*"v([^"]+)".*/\1/' | head -1)
+if [ -z "$KUBESEAL_VERSION" ]; then
+    KUBESEAL_VERSION="0.38.1"
+fi
+curl -L "https://github.com/bitnami-labs/sealed-secrets/releases/download/v${KUBESEAL_VERSION}/kubeseal-${KUBESEAL_VERSION}-linux-amd64.tar.gz" -o /tmp/kubeseal.tar.gz
 tar -xzf /tmp/kubeseal.tar.gz -C /usr/local/bin kubeseal
 rm /tmp/kubeseal.tar.gz
 chmod +x /usr/local/bin/kubeseal
@@ -210,7 +285,11 @@ k3d version
 # ========================================
 
 echo "Installing task (Go Task runner)..."
-curl -L "https://github.com/go-task/task/releases/download/v3.49.1/task_linux_amd64.tar.gz" -o /tmp/task.tar.gz
+TASK_VERSION=$(curl -s https://api.github.com/repos/go-task/task/releases/latest | grep '"tag_name"' | sed -E 's/.*"v([^"]+)".*/\1/' | head -1)
+if [ -z "$TASK_VERSION" ]; then
+    TASK_VERSION="3.51.1"
+fi
+curl -L "https://github.com/go-task/task/releases/download/v${TASK_VERSION}/task_linux_amd64.tar.gz" -o /tmp/task.tar.gz
 tar -xzf /tmp/task.tar.gz -C /usr/local/bin task
 rm /tmp/task.tar.gz
 chmod +x /usr/local/bin/task

@@ -9,7 +9,7 @@ FROM ${BASE_IMAGE}
 # Container version labels
 LABEL layer="2"
 LABEL layer.name="ops-bench"
-LABEL layer.version="1.0.0"
+LABEL layer.version="1.0.1"
 LABEL layer.description="Ops bench with deployment, CI/CD, and security tools (user-agnostic)"
 LABEL bench.type="ops-admin"
 
