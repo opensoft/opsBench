@@ -17,7 +17,12 @@ CODE_SERVER_VERSION=$(curl -s https://api.github.com/repos/coder/code-server/rel
 if [ -z "$CODE_SERVER_VERSION" ]; then
     CODE_SERVER_VERSION="4.126.0"
 fi
-curl -fsSL https://code-server.dev/install.sh | sh -s -- --version "$CODE_SERVER_VERSION"
+code_server_installer="$(mktemp)"
+trap 'rm -f "$code_server_installer"' EXIT
+curl -fsSL https://code-server.dev/install.sh -o "$code_server_installer"
+sh "$code_server_installer" --version "$CODE_SERVER_VERSION"
+rm -f "$code_server_installer"
+trap - EXIT
 code-server --version
 
 echo "Installing Azure ML CLI (v2)..."
@@ -29,7 +34,7 @@ ACT_VERSION=$(curl -s https://api.github.com/repos/nektos/act/releases/latest | 
 if [ -z "$ACT_VERSION" ]; then
     ACT_VERSION="0.2.89"
 fi
-curl -L "https://github.com/nektos/act/releases/download/v${ACT_VERSION}/act_Linux_x86_64.tar.gz" -o /tmp/act.tar.gz
+curl -fL "https://github.com/nektos/act/releases/download/v${ACT_VERSION}/act_Linux_x86_64.tar.gz" -o /tmp/act.tar.gz
 tar -xzf /tmp/act.tar.gz -C /usr/local/bin act
 rm /tmp/act.tar.gz
 chmod +x /usr/local/bin/act
@@ -84,7 +89,7 @@ tilt version
 # ========================================
 
 echo "Installing Vault CLI..."
-VAULT_VERSION=$(curl -s https://api.github.com/repos/hashicorp/vault/releases/latest | grep '"tag_name"' | sed -E 's/.*"v([^"]+)".*/\1/')
+VAULT_VERSION=$(curl -s https://api.github.com/repos/hashicorp/vault/releases/latest | grep '"tag_name"' | sed -E 's/.*"v([^"]+)".*/\1/' | head -1)
 if [ -z "$VAULT_VERSION" ]; then
     VAULT_VERSION="2.0.3"
 fi
@@ -186,7 +191,7 @@ if [ -z "$K6_VERSION" ]; then
 fi
 curl -L "https://github.com/grafana/k6/releases/download/v${K6_VERSION}/k6-v${K6_VERSION}-linux-amd64.tar.gz" -o /tmp/k6.tar.gz
 tar -xzf /tmp/k6.tar.gz -C /tmp
-mv /tmp/k6-v${K6_VERSION}-linux-amd64/k6 /usr/local/bin/
+mv "/tmp/k6-v${K6_VERSION}-linux-amd64/k6" /usr/local/bin/
 rm -rf /tmp/k6*
 chmod +x /usr/local/bin/k6
 k6 version

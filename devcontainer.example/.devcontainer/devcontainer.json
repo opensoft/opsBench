@@ -1,6 +1,6 @@
 {
   "name": "sysBenches / opsBench",
-  "initializeCommand": "bash ${localWorkspaceFolder}/../../../scripts/prepare-bench-start.sh --container ops-bench --base ops-bench:latest --user ${localEnv:USER} --project sys-benches --service ops-bench",
+  "initializeCommand": "mkdir -p \"${localEnv:HOME}/.claude-profiles\" \"${localEnv:HOME}/.chatgpt-profiles\" && bash -lc 'helper=\"${localWorkspaceFolder}/../../../scripts/prepare-bench-start.sh\"; if [[ -x \"$helper\" ]]; then \"$helper\" --container ops-bench --base ops-bench:latest --user \"${localEnv:USER}\" --project sys-benches --service ops-bench; fi'",
   "dockerComposeFile": "../docker-compose.yml",
   "service": "ops-bench",
   "shutdownAction": "stopCompose",
