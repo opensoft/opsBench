@@ -1,6 +1,6 @@
 {
   "name": "sysBenches / opsBench",
-  "initializeCommand": "bash ${localWorkspaceFolder}/../../scripts/ensure-layer3.sh --base ops-bench:latest",
+  "initializeCommand": "mkdir -p \"${localEnv:HOME}/.claude-profiles\" \"${localEnv:HOME}/.chatgpt-profiles\" && bash -lc 'helper=\"${localWorkspaceFolder}/../../../scripts/prepare-bench-start.sh\"; if [[ -r \"$helper\" ]]; then bash \"$helper\" --container ops-bench --base ops-bench:latest --user \"${localEnv:USER}\" --project sys-benches --service ops-bench; fi'",
   "dockerComposeFile": "../docker-compose.yml",
   "service": "ops-bench",
   "shutdownAction": "stopCompose",
@@ -43,7 +43,9 @@
     "source=/var/run/docker.sock,target=/var/run/docker.sock,type=bind",
     "source=${localEnv:HOME}/.claude,target=/home/${localEnv:USER}/.claude,type=bind,consistency=cached",
     "source=${localEnv:HOME}/.claude.json,target=/home/${localEnv:USER}/.claude.json,type=bind,consistency=cached",
+    "source=${localEnv:HOME}/.claude-profiles,target=/home/${localEnv:USER}/.claude-profiles,type=bind,consistency=cached",
     "source=${localEnv:HOME}/.codex,target=/home/${localEnv:USER}/.codex,type=bind,consistency=cached",
+    "source=${localEnv:HOME}/.chatgpt-profiles,target=/home/${localEnv:USER}/.chatgpt-profiles,type=bind,consistency=cached",
     "source=${localEnv:HOME}/.gemini,target=/home/${localEnv:USER}/.gemini,type=bind,consistency=cached",
     "source=${localEnv:HOME}/.copilot-cli,target=/home/${localEnv:USER}/.copilot-cli,type=bind,readonly"
   ],
