@@ -15,4 +15,5 @@ services:
 
 volumes:
   opsbench-zshhistory:
-    name: opsbench-zshhistory
+    # Retain the existing volume; override for a legacy engine name.
+    name: ${WORKBENCH_HISTORY_VOLUME:-opsbench-zshhistory}
