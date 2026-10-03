@@ -8,4 +8,5 @@ services:
     working_dir: /workspace
     privileged: true
     environment:
+      - HISTFILE=/home/${USER:-brett}/.workbenches-history/.zsh_history
       - DOCKER_HOST=unix:///var/run/docker.sock
