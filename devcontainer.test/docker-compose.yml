@@ -2,6 +2,7 @@ version: '3.8'
 
 services:
   test:
+    init: true
     image: ops-bench:latest
     container_name: ops-bench-test
     command: sleep infinity
